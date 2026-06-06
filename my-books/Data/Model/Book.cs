@@ -16,5 +16,6 @@
         //Navigation property
         public Publisher Publisher { get; set; } //Foreign Key
         public int PublisherId { get; set; } //Primary Key
+        public List<Book_Author> Book_Authors { get; set; }
     }
 }

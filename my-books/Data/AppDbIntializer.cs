@@ -18,7 +18,6 @@ namespace my_books.Data
                         IsRead = true,
                         DateRead = DateTime.Now.AddDays(-10),
                         Genre = "Fantasy",
-                        Author = "J.R.R. Tolkien",
                         CoverUrl = "https://upload.wikimedia.org/wikipedia/en/8/8e/The_Lord_of_the_Rings_cover.gif",
                         DateAdded = DateTime.Now
                     },
@@ -27,7 +26,6 @@ namespace my_books.Data
                         Title = "The Hobbit",
                         Description = "A children's fantasy novel by English author J. R. R. Tolkien.",
                         IsRead = false,
-                        Author = "J.R.R. Tolkien",
                         Genre = "Fantasy",
                         CoverUrl = "https://upload.wikimedia.org/wikipedia/en/4/4a/TheHobbit_FirstEdition.jpg",
                         DateAdded = DateTime.Now

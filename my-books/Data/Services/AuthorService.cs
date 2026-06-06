@@ -5,7 +5,7 @@ namespace my_books.Data.Services
 {
     public class AuthorService
     {
-        private AppDbContext _context;  
+        private AppDbContext _context;
         public AuthorService(AppDbContext context)
         {
             _context = context;
@@ -19,6 +19,16 @@ namespace my_books.Data.Services
             };
             _context.Authors.Add(_author);
             _context.SaveChanges();
+        }
+
+        public AuthorWithBooksVM GetAuthorWithBooks(int authorId)
+        {
+            var _authorWithBooksVM = _context.Authors.Where(n => n.Id == authorId).Select(n => new AuthorWithBooksVM()
+            {
+                FullName = n.FullName,
+                BookTitles = n.Book_Authors.Select(n => n.Book.Title).ToList()
+            }).FirstOrDefault();
+            return _authorWithBooksVM;
         }
     }
 }

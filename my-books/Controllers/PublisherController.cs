@@ -35,7 +35,7 @@ namespace my_books.Controllers
         }
 
         [HttpGet("get-publisher-books-authors/{id}")]
-        public IActionResult GetPublisherData(int id)
+        public IActionResult GetPublisherData(int id) 
         {
             var publisherData = _publisherService.GetPublisherData(id);
             if (publisherData == null)
@@ -63,6 +63,20 @@ namespace my_books.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("get-all-publishers")]
+        public IActionResult GetAllPublishers()
+        {
+            try
+            {
+                var publishers = _publisherService.GetAllPublishers();
+                return Ok(publishers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Sorry, an error occurred while fetching all publishers.");
             }
         }
     }

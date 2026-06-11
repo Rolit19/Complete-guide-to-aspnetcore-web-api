@@ -62,6 +62,8 @@ namespace my_books.Data.Services
             }
         }
 
+        public List<Publisher> GetAllPublishers() => _context.Publishers.ToList();
+
         private bool StringStartsWithNumber(string name) => Regex.IsMatch(name, @"^\d");
     }
 }

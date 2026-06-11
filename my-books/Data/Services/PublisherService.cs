@@ -62,7 +62,33 @@ namespace my_books.Data.Services
             }
         }
 
-        public List<Publisher> GetAllPublishers() => _context.Publishers.ToList();
+        public List<Publisher> GetAllPublishers(string sortBy, string searchString)
+        {
+            var publishers = _context.Publishers.AsQueryable();
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "name":
+                        publishers = publishers.OrderBy(p => p.Name);
+                        break;
+                    case "id":
+                        publishers = publishers.OrderBy(p => p.Id);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                publishers = publishers.Where(p => p.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            return publishers.ToList();
+
+        } 
 
         private bool StringStartsWithNumber(string name) => Regex.IsMatch(name, @"^\d");
     }

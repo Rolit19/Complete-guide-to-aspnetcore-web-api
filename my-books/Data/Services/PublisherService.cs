@@ -1,4 +1,5 @@
 ﻿using my_books.Data.Model;
+using my_books.Data.Paging;
 using my_books.Data.ViewModel;
 using my_books.Exceptions;
 using System.Text.RegularExpressions;
@@ -62,19 +63,19 @@ namespace my_books.Data.Services
             }
         }
 
-        public List<Publisher> GetAllPublishers(string sortBy, string searchString)
+        public List<Publisher> GetAllPublishers(string sortBy, string searchString, int? pageNumber)
         {
-            var publishers = _context.Publishers.AsQueryable();
+            var publishers = _context.Publishers.OrderBy(n=>n.Name).ToList();
 
             if (!string.IsNullOrEmpty(sortBy))
             {
                 switch (sortBy)
                 {
                     case "name":
-                        publishers = publishers.OrderBy(p => p.Name);
+                        publishers = publishers.OrderBy(p => p.Name).ToList();
                         break;
                     case "id":
-                        publishers = publishers.OrderBy(p => p.Id);
+                        publishers = publishers.OrderBy(p => p.Id).ToList();
                         break;
                     default:
                         break;
@@ -83,10 +84,14 @@ namespace my_books.Data.Services
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                publishers = publishers.Where(p => p.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase));
+                publishers = publishers.Where(p => p.Name.Contains(searchString, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
-            return publishers.ToList();
+            //Paging
+            int pageSize = 5;   
+            publishers = PaginatedList<Publisher>.Create(publishers.AsQueryable(), pageNumber ?? 1, pageSize);
+
+            return publishers;
 
         } 
 

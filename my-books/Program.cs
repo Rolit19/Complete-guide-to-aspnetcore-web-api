@@ -13,6 +13,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<BooksService>();
 builder.Services.AddTransient<AuthorService>();
 builder.Services.AddTransient<PublisherService>();
+builder.Services.AddApiVersioning(config =>
+{
+    config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+    config.AssumeDefaultVersionWhenUnspecified = true;
+});   
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();

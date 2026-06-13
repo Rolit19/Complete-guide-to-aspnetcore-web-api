@@ -17,6 +17,9 @@ builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
     config.AssumeDefaultVersionWhenUnspecified = true;
+
+    //config.ApiVersionReader = new Microsoft.AspNetCore.Mvc.Versioning.HeaderApiVersionReader("custom-version-header");
+    //config.ApiVersionReader = new Microsoft.AspNetCore.Mvc.Versioning.MediaTypeApiVersionReader("custom-version-media");
 });   
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

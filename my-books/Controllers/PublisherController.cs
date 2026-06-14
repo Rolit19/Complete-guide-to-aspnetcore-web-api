@@ -11,9 +11,11 @@ namespace my_books.Controllers
     public class PublishersController : ControllerBase
     {
         public PublisherService _publisherService;
-        public PublishersController(PublisherService publisherService)
+        private readonly ILogger<PublishersController> _logger;
+        public PublishersController(PublisherService publisherService, ILogger<PublishersController> logger)
         {
             _publisherService = publisherService;
+            _logger = logger;
         }
 
         [HttpPost("add-publisher")]
@@ -71,6 +73,7 @@ namespace my_books.Controllers
         {
             try
             {
+                _logger.LogInformation("Fetching all publishers with sortBy: {SortBy}, searchString: {SearchString}, pageNumber: {PageNumber}", sortBy, searchString, pageNumber);
                 var publishers = _publisherService.GetAllPublishers(sortBy, searchString, pageNumber);
                 return Ok(publishers);
             }

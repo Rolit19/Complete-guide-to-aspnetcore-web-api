@@ -2,8 +2,25 @@ using Microsoft.EntityFrameworkCore;
 using my_books.Data;
 using my_books.Data.Services;
 using my_books.Exceptions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+//Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Information()
+//    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+//    .CreateLogger();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -52,4 +69,12 @@ app.ConfigureBuiltInExceptionMiddleware();
 
 app.MapControllers();
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+

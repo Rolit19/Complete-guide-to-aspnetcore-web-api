@@ -1,0 +1,5 @@
+2026-06-14 17:17:47.582 +05:30 [INF] Fetching all publishers with sortBy: name, searchString: P, pageNumber: 0
+2026-06-14 17:17:51.810 +05:30 [INF] Executed DbCommand (61ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Name]
+FROM [Publishers] AS [p]
+ORDER BY [p].[Name]

@@ -30,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<BooksService>();
 builder.Services.AddTransient<AuthorService>();
 builder.Services.AddTransient<PublisherService>();
+builder.Services.AddTransient<LogService>();
 builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);

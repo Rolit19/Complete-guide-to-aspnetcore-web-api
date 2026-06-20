@@ -33,7 +33,7 @@ namespace my_books_tests
         public void GetAllPublishers_WithNoSortBy_WithNoSearchStrng_WithNoPageNumber()
         {
             var result = publisherService.GetAllPublishers("", "", null);
-            Assert.That(result.Count, Is.EqualTo(3));
+            Assert.That(result.Count, Is.EqualTo(5));
         }
 
         [Test, Order(2)]
@@ -106,6 +106,13 @@ namespace my_books_tests
             Assert.That(result.BookAuthors.OrderBy(a => a.BookName).FirstOrDefault().BookName, Is.EqualTo("The Hobbit"));
         }
 
+        [Test, Order(10)]
+        public void DeletePublisherById_WithResponse_Test()
+        {
+            publisherService.DeletePublisherById(1);
+            Assert.That(context.Publishers.Count(), Is.EqualTo(8));
+        }
+
         [OneTimeTearDown]
         public void CleanUp()
         {
@@ -132,7 +139,7 @@ namespace my_books_tests
             {
                 new Author { Id=1, FullName = "Author 1" },
                 new Author { Id=2, FullName = "Author 2" }
-            }; 
+            };
             context.Authors.AddRange(authors);
 
             var books = new List<Book>

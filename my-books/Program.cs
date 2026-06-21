@@ -1,8 +1,13 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using my_books.Data;
+using my_books.Data.Model;
 using my_books.Data.Services;
 using my_books.Exceptions;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +21,7 @@ var configuration = new ConfigurationBuilder()
 //    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
 //    .CreateLogger();
 
-Log.Logger = new LoggerConfiguration()
+Serilog.Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
     .CreateLogger();
 
@@ -41,6 +46,47 @@ builder.Services.AddApiVersioning(config =>
 });   
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+//Add Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+//Add Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+//Add JWT Bearer
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"])),
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:Audience"]
+    };
+});
+
+SecurityKey SymmetricSecurityKey(byte[] bytes)
+{
+    throw new NotImplementedException();
+}
+
+TokenValidationParameters TokenValidationParameters()
+{
+    throw new NotImplementedException();
+}
+
+//Add JWT Bearer
+
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -76,6 +122,6 @@ try
 }
 finally
 {
-    Log.CloseAndFlush();
+    Serilog.Log.CloseAndFlush();
 }
 

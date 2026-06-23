@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my_books.Data.Services;
 using my_books.Data.ViewModel;
@@ -8,6 +9,7 @@ namespace my_books.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PublishersController : ControllerBase
     {
         public PublisherService _publisherService;
@@ -69,7 +71,7 @@ namespace my_books.Controllers
         }
 
         [HttpGet("get-all-publishers")]
-        public IActionResult GetAllPublishers(string sortBy, string searchString, int pageNumber)
+        public IActionResult GetAllPublishers(string sortBy="Name", string searchString="P", int pageNumber=1)
         {
             try
             {

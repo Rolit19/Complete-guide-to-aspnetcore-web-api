@@ -47,6 +47,23 @@ builder.Services.AddApiVersioning(config =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Token Validation parameters 
+var tokenValidationParameters = new TokenValidationParameters()
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"])),
+
+    ValidateIssuer = true,
+    ValidIssuer = builder.Configuration["JWT:Issuer"],
+
+    ValidateAudience = false,
+    ValidAudience = builder.Configuration["JWT:Audience"],
+
+    ValidateLifetime = true,
+    ClockSkew = TimeSpan.Zero
+};
+builder.Services.AddSingleton(tokenValidationParameters);
+
 //Add Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
@@ -63,15 +80,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.SaveToken = true;
     options.RequireHttpsMetadata = false;
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JWT:Secret"])),
-        ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:Audience"]
-    };
+    options.TokenValidationParameters = tokenValidationParameters;
 });
 
 SecurityKey SymmetricSecurityKey(byte[] bytes)
@@ -107,6 +116,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+//Authentication & Autherisation
+app.UseAuthentication();
 
 app.UseAuthorization();
 

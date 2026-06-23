@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my_books.Data.Services;
 using my_books.Data.ViewModel;
+using my_books.Data.ViewModel.Authentication;
 
 namespace my_books.Controllers
 {
@@ -22,6 +24,7 @@ namespace my_books.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = UserRoles.Author)]
         [HttpGet("get-all-books")]
         public IActionResult GetAllBooks()
         {
@@ -29,6 +32,7 @@ namespace my_books.Controllers
             return Ok(allBooks);
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         [HttpGet("get-book-by-id/{id}")]
         public IActionResult GetBookByID(int id)
         {

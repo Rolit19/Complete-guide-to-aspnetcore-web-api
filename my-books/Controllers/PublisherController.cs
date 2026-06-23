@@ -3,13 +3,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using my_books.Data.Services;
 using my_books.Data.ViewModel;
+using my_books.Data.ViewModel.Authentication;
 using my_books.Exceptions;
 
 namespace my_books.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = UserRoles.Publisher+ "," + UserRoles.Admin)]
     public class PublishersController : ControllerBase
     {
         public PublisherService _publisherService;

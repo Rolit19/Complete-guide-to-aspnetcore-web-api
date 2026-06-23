@@ -126,6 +126,8 @@ app.UseAuthorization();
 app.ConfigureBuiltInExceptionMiddleware();
 //app.ConfigureCustomExceptionMiddleware();
 
+AppDbIntializer.SeedRoles(app).Wait();
+
 app.MapControllers();
 
 try
